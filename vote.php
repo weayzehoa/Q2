@@ -1,11 +1,6 @@
 <?php
     if(!empty($_POST['vote'])){
-        $add = 0;
-        $sql = "SELECT * from que_option where q_o_seq ='".$_POST['vote']."'";
-        $ro1 = mysqli_query($link,$sql);
-        $row1 = mysqli_fetch_assoc($ro1);
-        $add = $row1['q_o_vote'] + 1;
-        $sql = "UPDATE que_option set q_o_vote = '".$add."' where q_o_seq ='".$_POST['vote']."'";
+        $sql = "UPDATE que_option set q_o_vote = q_o_vote + 1 where q_o_seq ='".$_POST['vote']."'";
         mysqli_query($link,$sql);
         header("location:?do=que");
     }

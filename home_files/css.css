@@ -36,9 +36,9 @@ a:hover
 #all
 {
 	width:1024px;
-	height:764px;
+	height:768px;
 	background:#FFF;
-	margin:10px auto 10px auto;
+	margin:0 auto;
 	box-shadow:#999 0px 0px 1px .3px;
 }
 #title
