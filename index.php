@@ -21,6 +21,29 @@
 		if($_GET['do'] == "vote"){ $goto = "vote.php";}
 	}
 
+	$sql = "SELECT * from visit where v_date = '".$today."'";
+	$ro = mysqli_query($link,$sql);
+	$row = mysqli_fetch_assoc($ro);
+	//下面這幾行可以不做, 但資料庫須先建立今日瀏覽的資料
+	$check = mysqli_num_rows($ro);
+	if($check == 0){
+		$sql = "INSERT into visit value(null,'".$today."',1)";
+		mysqli_query($link,$sql);
+		$row['v_today'] = 1;
+		$_SESSION['v'] = 123;
+	}
+
+	//判斷有沒有SESSION['v']存在, 若沒有則更新今日瀏覽次數 +1
+	if(empty($_SESSION['v'])){
+		$sql = "UPDATE visit set v_today = v_today + 1 where v_date ='".$today."'";
+		mysqli_query($link,$sql);
+		$_SESSION['v'] = 123;
+	}
+
+
+	$sql = "SELECT SUM(v_today) as total from visit";
+	$ro1 = mysqli_query($link,$sql);
+	$row1 = mysqli_fetch_array($ro1);
 ?>
 
 
@@ -44,7 +67,7 @@
 	<iframe name="back" style="display:none;"></iframe>
 	<div id="all">
 		<div id="title">
-			<?=date("m")?> 月 <?=date("d")?> 號 <?=date("l")?> | 今日瀏覽: 1 | 累積瀏覽: 36 <span style="float:right"><a href="?">回首頁</a></span></div>
+			<?=date("m")?> 月 <?=date("d")?> 號 <?=date("l")?> | 今日瀏覽: <?=$row['v_today']?> | 累積瀏覽: <?=$row1['total']?> <span style="float:right"><a href="?">回首頁</a></span></div>
 		<div id="title2">
 			<a href="?"><img src="home_files/02B01.jpg" alt="健康促進網-回首頁"></a>
 		</div>
